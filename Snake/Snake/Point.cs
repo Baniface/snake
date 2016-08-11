@@ -36,6 +36,12 @@ namespace Snake
             Console.Write(sym);
         }
 
+        public void Clear()
+        {
+            sym = ' ';
+            Draw();
+        }
+
         public void Move(int offset, Direction direction)
         {
             if(direction == Direction.RIGHT)
