@@ -30,6 +30,11 @@ namespace Snake
             sym = p.sym;
         }
 
+        public bool IsHit(Point food)
+        {
+            return food.x == this.x && food.y == this.y;
+        }
+
         public void Draw()
         {
             Console.SetCursorPosition(x, y);
