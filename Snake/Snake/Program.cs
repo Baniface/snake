@@ -15,24 +15,32 @@ namespace Snake
             Console.SetBufferSize(80, 25);
             char sym = '+';
 
+            List<Figure> figures = new List<Figure>();
+
             HorizontalLine lineTop = new HorizontalLine(Console.WindowLeft, 78, 0, sym);
-            lineTop.Draw();
-
             HorizontalLine lineBottom = new HorizontalLine(Console.WindowLeft, 78, 24, sym);
-            lineBottom.Draw();
-
             VerticalLine lineLeft = new VerticalLine(Console.WindowLeft, 1, 24, sym);
-            lineLeft.Draw();
-
             VerticalLine lineRight = new VerticalLine(78, 1, 24, sym);
-            lineRight.Draw();
+
+            figures.Add(lineTop);
+            figures.Add(lineBottom);
+            figures.Add(lineLeft);
+            figures.Add(lineRight);
 
             //отрисовка змейки
             Point p = new Point(4, 5, '*');
-            Snake snake = new Snake(p, 4, Direction.RIGHT);
-            snake.Draw();
+            Figure fSnake = new Snake(p, 4, Direction.RIGHT);
+            figures.Add(fSnake);
+            //Draw(fSnake);
+            Snake snake = (Snake)fSnake;
+            //snake.Draw();
 
-            FoodCreator foodCreator = new FoodCreator(80, 25, '$');
+            foreach (var f in figures)
+            {
+                f.Draw();
+            }
+
+            FoodCreator foodCreator = new FoodCreator(80, 25, '#');
             Point food = foodCreator.CreateFood();
             food.Draw();
             
@@ -48,7 +56,7 @@ namespace Snake
                     snake.Move();
                 }
 
-                Thread.Sleep(300);
+                Thread.Sleep(150);
                 
                 if(Console.KeyAvailable)
                 {
@@ -56,9 +64,14 @@ namespace Snake
                     snake.HandleKey(key.Key);
                 }
 
-                Thread.Sleep(300);
+                Thread.Sleep(150);
                 snake.Move();
             }
+        }
+
+        static void Draw(Figure figure)
+        {
+            figure.Draw();
         }
     }
 }
