@@ -53,6 +53,16 @@ namespace Snake
             return false;
         }
 
+        public bool FoodInSnake(Point food)
+        {
+            foreach(Point p in pList)
+            {
+                if (p.IsHit(food))
+                    return true;
+            }
+            return false;
+        }
+
         public void HandleKey(ConsoleKey key)
         {
             if (key == ConsoleKey.LeftArrow)
@@ -76,6 +86,12 @@ namespace Snake
             }
             else
                 return false;
+        }
+
+        public void Clear()
+        {
+            foreach (Point p in pList)
+                p.Clear();
         }
     }
 }

@@ -9,40 +9,66 @@ namespace Snake
 {
     class Program
     {
+        static int w = 80;
+        static int h = 25;
+        
         static void Main(string[] args)
         {
+            Console.SetBufferSize(w, h);
 
-            Console.SetBufferSize(80, 25);
-
-            Walls walls = new Walls(80, 25);
+            Walls walls = new Walls(w, h);
             walls.Draw();
 
             //отрисовка змейки
-            Point p = new Point(4, 5, '*');
+            Point p = new Point(4, 5, '8');
             Snake snake = new Snake(p, 4, Direction.RIGHT);
             snake.Draw();
 
-            FoodCreator foodCreator = new FoodCreator(80, 25, '$');
-            Point food = foodCreator.CreateFood();
+            FoodCreator foodCreator = new FoodCreator(w, h, '$');
+            Point food;
+            do
+            {
+                food = foodCreator.CreateFood();
+            }
+            while (snake.FoodInSnake(food));
             food.Draw();
             
             while(true)
             {
                 if(walls.IsHit(snake) || snake.IsHitTail())
                 {
-                    break;
+                    TheEnd theEnd = new TheEnd(snake, food);
+                    if (theEnd.isExit())
+                        break;
+                    else
+                    {
+                        Refresh(walls);
+                        snake = new Snake(p, 4, Direction.RIGHT);
+                        snake.Draw();
+
+                        do
+                        {
+                            food = foodCreator.CreateFood();
+                        }
+                        while (snake.FoodInSnake(food));
+                        food.Draw();
+                    }
                 }
                 if(snake.Eat(food))
                 {
-                    food = foodCreator.CreateFood();
+                    do
+                    {
+                        food = foodCreator.CreateFood();
+                    }
+                    while (snake.FoodInSnake(food));
                     food.Draw();
                 }
                 else
                 {
-                    snake.Move();
+                    //snake.Move();
                 }
 
-                Thread.Sleep(100);
+                //Thread.Sleep(100);
                 
                 if(Console.KeyAvailable)
                 {
@@ -53,6 +79,12 @@ namespace Snake
                 Thread.Sleep(100);
                 snake.Move();
             }
+        }
+
+        static void Refresh(Walls walls)
+        {
+            Console.Clear();
+            walls.Draw();
         }
     }
 }
